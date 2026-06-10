@@ -1,5 +1,6 @@
 const { YooKassa } = require('@webzaytsev/yookassa-ts-sdk');
-const { Order } = require('../models/models');
+const { Order, OrderItem, Cloth } = require('../models/models');
+const { sendPaidOrderEmail } = require('../utils/mailer');
 
 const yooKassa = YooKassa({
     shop_id: process.env.YOOKASSA_SHOP_ID,

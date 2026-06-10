@@ -49,25 +49,22 @@ class OrderController {
         }
 
         if (paymentMethod === 'cash') {
-            try {
-                const orderItems = items.map(item => ({
-                    name: item.name,
-                    size: item.size,
-                    quantity: item.quantity,
-                    price: item.price
-                }));
-                await sendOrderConfirmation(customer.email, {
-                    id: order.id,
-                    total: total,
-                    deliveryType,
-                    paymentMethod,
-                    items: orderItems,
-                    customerName: customer.fullName
-                });
-                console.log(`Письмо отправлено на ${customer.email}`);
-            } catch (err) {
-                console.error('Ошибка отправки письма:', err);
-            }
+            const orderItems = items.map(item => ({
+                name: item.name,
+                size: item.size,
+                quantity: item.quantity,
+                price: item.price
+            }));
+            sendOrderConfirmation(customer.email, {
+                id: order.id,
+                total: total,
+                deliveryType,
+                paymentMethod,
+                items: orderItems,
+                customerName: customer.fullName
+            })
+                .then(() => console.log(`Письмо отправлено на ${customer.email}`))
+                .catch(err => console.error('Ошибка отправки письма:', err));
         }
 
         return res.json(order);
