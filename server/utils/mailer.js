@@ -17,6 +17,41 @@ const transporter = nodemailer.createTransport({
     socketTimeout: 10000,
 });
 
+const MAIL_FROM = process.env.MAIL_FROM || process.env.SMTP_USER;
+
+// Render блокирует исходящие SMTP-соединения, поэтому в проде письма
+// уходят через HTTP API Brevo. Локально (без BREVO_API_KEY) используется SMTP.
+const sendMail = async ({ to, subject, html }) => {
+    if (process.env.BREVO_API_KEY) {
+        const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json',
+                'api-key': process.env.BREVO_API_KEY,
+                'content-type': 'application/json',
+            },
+            body: JSON.stringify({
+                sender: { email: MAIL_FROM, name: 'Поинт Shop' },
+                to: [{ email: to }],
+                subject,
+                htmlContent: html,
+            }),
+        });
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`Brevo API error ${response.status}: ${text}`);
+        }
+        return;
+    }
+
+    await transporter.sendMail({
+        from: `"Поинт Shop" <${MAIL_FROM}>`,
+        to,
+        subject,
+        html,
+    });
+};
+
 const sendOrderConfirmation = async (toEmail, orderData) => {
     const { id, total, deliveryType, paymentMethod, items, customerName } = orderData;
 
@@ -50,11 +85,10 @@ const sendOrderConfirmation = async (toEmail, orderData) => {
         <p>С уважением, команда Поинт.</p>
     `;
 
-    await transporter.sendMail({
-        from: `"Поинт Shop" <${process.env.SMTP_USER}>`,
+    await sendMail({
         to: toEmail,
         subject: `Подтверждение заказа №${id}`,
-        html: html,
+        html,
     });
 };
 
@@ -87,11 +121,10 @@ const sendPaidOrderEmail = async (toEmail, orderData) => {
         <p>С уважением, команда Audinys.</p>
     `;
 
-    await transporter.sendMail({
-        from: process.env.SMTP_USER,
+    await sendMail({
         to: toEmail,
         subject: `Оплата заказа №${id} прошла успешно`,
-        html
+        html,
     });
 };
 
