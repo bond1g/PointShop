@@ -1,0 +1,51 @@
+.sort-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.sort-bar__label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #777;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+}
+
+.sort-bar__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.sort-bar__btn {
+    padding: 4px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    background: #fff;
+    color: #555;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+    white-space: nowrap;
+}
+
+.sort-bar__btn:hover {
+    border-color: #999;
+    color: #111;
+}
+
+.sort-bar__btn--active {
+    border-color: #111;
+    color: #111;
+    font-weight: 600;
+    background: #fff;
+}
+
+.sort-bar__btn--active:hover {
+    border-color: #111;
+    color: #111;
+}

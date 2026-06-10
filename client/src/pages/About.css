@@ -1,0 +1,38 @@
+.about-page {
+    padding-bottom: 3rem;
+}
+
+.about-text h1 {
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.about-text p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+.about-text address {
+    font-style: normal;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.map-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .about-text {
+        margin-bottom: 2rem;
+    }
+    .map-container iframe {
+        height: 300px;
+    }
+}
